@@ -7,10 +7,15 @@ import itertools
 import tempfile
 import subprocess
 
+def star(f):
+    """ see https://stackoverflow.com/q/21892989 """
+    return lambda args: f(*args)
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Show diff in vim tab pages")
     parser.add_argument("pathA")
     parser.add_argument("pathB")
+    parser.add_argument("--vim", help="vim command to run", default="vim")
     return parser.parse_args()
 
 def get_dir_info(dirname):
@@ -29,9 +34,9 @@ def get_pairs(aItems, bItems):
     aItems = [(item, 'A') for item in aItems]
     bItems = [(item, 'B') for item in bItems]
     abItems = aItems + bItems
-    abItems.sort(key= lambda item: (item[0].name, item[1]))
-    for _, items in itertools.groupby(abItems, lambda item: item[0].name):
-        items = list(items)
+    abItems.sort(key=star(lambda item, tag: (item.name, tag)))
+    for _, items in itertools.groupby(abItems, key=star(lambda item, _: item.name)):
+        items = list(items) # NOTE: python 3.10's match expression can make this better
         if len(items) == 2:
             (aItem, _), (bItem, _) = items
             yield aItem, bItem
@@ -51,15 +56,15 @@ def get_file_pairs(a, b):
 
 def main():
     args = parse_args()
-    print("Helloworld")
     vimCmdFile = tempfile.NamedTemporaryFile(mode='w', delete=False)
     with vimCmdFile:
         for a, b in get_file_pairs(args.pathA, args.pathB):
-            aPath = str(a) if a else "/dev/null"
-            bPath = str(b) if b else "/dev/null"
-            print(f"tabedit {aPath} | diffthis | vsp {bPath} | diffthis", file=vimCmdFile)
+            aPath = a.resolve() if a else "/dev/null"
+            bPath = b.resolve() if b else "/dev/null"
+            print(f"tabedit {aPath} | diffthis | vsp {bPath} | diffthis | diffupdate", file=vimCmdFile)
+        print("tabrewind | bdelete", file=vimCmdFile)
         print(f"""call delete("{vimCmdFile.name}")""", file=vimCmdFile)
-    subprocess.run(["vim", "-S", vimCmdFile.name])
+    subprocess.run(args.vim.split() + ["-S", vimCmdFile.name])
 
 if __name__ == '__main__':
     main()
