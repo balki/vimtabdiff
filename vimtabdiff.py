@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os,sys
+import os
 import argparse
 import pathlib
 import itertools
@@ -59,8 +59,8 @@ def main():
     vimCmdFile = tempfile.NamedTemporaryFile(mode='w', delete=False)
     with vimCmdFile:
         for a, b in get_file_pairs(args.pathA, args.pathB):
-            aPath = a.resolve() if a else "/dev/null"
-            bPath = b.resolve() if b else "/dev/null"
+            aPath = a.resolve() if a else os.devnull
+            bPath = b.resolve() if b else os.devnull
             print(f"tabedit {aPath} | diffthis | vsp {bPath} | diffthis | diffupdate", file=vimCmdFile)
         print("tabrewind | bdelete", file=vimCmdFile)
         print(f"""call delete("{vimCmdFile.name}")""", file=vimCmdFile)
