@@ -12,7 +12,7 @@ def star(f):
     return lambda args: f(*args)
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Show diff in vim tab pages")
+    parser = argparse.ArgumentParser(description="Show diff of files from two directories in vim tabs")
     parser.add_argument("pathA")
     parser.add_argument("pathB")
     parser.add_argument("--vim", help="vim command to run", default="vim")
@@ -62,8 +62,11 @@ def main():
             aPath = a.resolve() if a else os.devnull
             bPath = b.resolve() if b else os.devnull
             print(f"tabedit {aPath} | diffthis | vsp {bPath} | diffthis | diffupdate", file=vimCmdFile)
-        print("tabrewind | bdelete", file=vimCmdFile)
-        print(f"""call delete("{vimCmdFile.name}")""", file=vimCmdFile)
+        cmds = f"""
+        tabfirst | tabclose
+        call delete("{vimCmdFile.name}")
+        """
+        print(cmds, file=vimCmdFile)
     subprocess.run(args.vim.split() + ["-S", vimCmdFile.name])
 
 if __name__ == '__main__':
