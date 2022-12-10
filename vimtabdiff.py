@@ -2,32 +2,36 @@
 
 import os
 import argparse
-import pathlib
 import itertools
 import tempfile
 import subprocess
+from pathlib import Path
+from typing import Callable, TypeVar
+from collections.abc import Iterator, Sequence
+
+T = TypeVar('T')
 
 
-def star(f):
+def star(f: Callable[..., T]) -> Callable[[Sequence], T]:
     """ see https://stackoverflow.com/q/21892989 """
     return lambda args: f(*args)
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Show diff of files from two directories in vim tabs")
-    parser.add_argument("pathA")
-    parser.add_argument("pathB")
+            description="Show diff of files from two directories in vim tabs",
+            epilog="See https://github.com/balki/vimtabdiff for more info")
+    parser.add_argument("pathA", type=Path)
+    parser.add_argument("pathB", type=Path)
     parser.add_argument("--vim", help="vim command to run", default="vim")
     return parser.parse_args()
 
 
-def get_dir_info(dirname):
-    if not dirname:
+def get_dir_info(dirpath: Path | None) -> tuple[list[Path], list[Path]]:
+    if not dirpath:
         return [], []
     dirs, files = [], []
-    dirp = pathlib.Path(dirname)
-    for p in dirp.iterdir():
+    for p in dirpath.iterdir():
         if p.is_dir():
             dirs.append(p)
         else:
@@ -35,27 +39,25 @@ def get_dir_info(dirname):
     return dirs, files
 
 
-def get_pairs(aItems, bItems):
+def get_pairs(aItems: list[Path],
+              bItems: list[Path]) -> Iterator[tuple[Path | None, Path | None]]:
     aItems = [(item, 'A') for item in aItems]
     bItems = [(item, 'B') for item in bItems]
     abItems = aItems + bItems
     abItems.sort(key=star(lambda item, tag: (item.name, tag)))
     for _, items in itertools.groupby(abItems,
                                       key=star(lambda item, _: item.name)):
-        items = list(items)
-        # NOTE: python 3.10's match expression can make this better
-        if len(items) == 2:
-            (aItem, _), (bItem, _) = items
-            yield aItem, bItem
-        else:
-            (item, tag), = items
-            if tag == 'A':
+        match list(items):
+            case [(aItem, _), (bItem, _)]: 
+                yield aItem, bItem
+            case [(item, 'A'),]:
                 yield item, None
-            else:
+            case [(item, 'B'),]:
                 yield None, item
 
 
-def get_file_pairs(a, b):
+def get_file_pairs(a: Path,
+                   b: Path) -> Iterator[tuple[Path | None, Path | None]]:
     aDirs, aFiles = get_dir_info(a)
     bDirs, bFiles = get_dir_info(b)
     yield from get_pairs(aFiles, bFiles)
@@ -63,7 +65,7 @@ def get_file_pairs(a, b):
         yield from get_file_pairs(aDir, bDir)
 
 
-def main():
+def main() -> None:
     args = parse_args()
     vimCmdFile = tempfile.NamedTemporaryFile(mode='w', delete=False)
     with vimCmdFile:

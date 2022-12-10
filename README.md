@@ -40,7 +40,7 @@
 
 Git config file (`~/.gitconfig`) should look like this
 
-```toml
+```TOML
     [alias]
             ...
             dt = difftool --tool vimtabdiff --dir-diff
@@ -51,13 +51,13 @@ Git config file (`~/.gitconfig`) should look like this
 
 # Known issues
 
-  1. If your path to custom vim has space, it does not work. i.e. Following does *not* work
+  1. If your path to custom vim has space, it does not work. i.e. Following does **not** work
 
       ```bash
       git config --global difftool.vimtabdiff.cmd 'vimtabdiff.py --vim "/home/foo/my files/bin/vim" $LOCAL $REMOTE'
       ```
-  2. Not tested in non-linux OS. Pull requests welcome if found any issues.
+  2. Not tested in non-linux OS. Pull requests welcome if found any issues but hopefully should work fine.
 
 # Similar
 
-  https://gist.github.com/Osse/4709787
+https://gist.github.com/Osse/4709787
