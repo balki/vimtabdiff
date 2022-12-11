@@ -13,7 +13,7 @@ Do you use `git difftool` to review changes before making a commit? The problem 
 
     chmod +x ~/bin/vimtabdiff.py
 
-You may need to add `~/bin` to your PATH variable if not already done. See [here](needed://wiki.archlinux.org/title/Environment_variables#Per_user) for help
+You may need to add `~/bin` to your PATH variable if not already done. See [here](needed://wiki.archlinux.org/title/Environment_variables#Per_user) for help.
 👍 this [issue](https://github.com/balki/vimtabdiff/issues/1) for `pip install` support 
 
 
@@ -37,16 +37,16 @@ You may need to add `~/bin` to your PATH variable if not already done. See [here
 
 ## Relevant vim tips
 
-`gt`                 → Go to next tab
-`gT`                 → Go to previous tab
-`:tabr`              → Go to first tab
-`:drop filenam<Tab>` → Go to the tab with filename
-`g<Tab>`             → Go to last used tab (Works in vim version > 8.2.1401)
-`set mouse`          → Now clicking on a tab works
-`]c`                 → Go to next diff hunk
-`[c`                 → Go to previous diff hunk
-`do`, `dp`             → Diff obtain, Diff put
-`zo`, `zc`, `zR`         → Fold open, Fold close, open all folds
+  * `gt`                 → Go to next tab
+  * `gT`                 → Go to previous tab
+  * `:tabr`              → Go to first tab
+  * `:drop filenam<Tab>` → Go to the tab with filename
+  * `g<Tab>`             → Go to last used tab (Works in vim version > 8.2.1401)
+  * `set mouse`          → Now clicking on a tab works
+  * `]c`                 → Go to next diff hunk
+  * `[c`                 → Go to previous diff hunk
+  * `do`, `dp`             → Diff obtain, Diff put
+  * `zo`, `zc`, `zR`         → Fold open, Fold close, open all folds
 
 # See Git diffs
 
