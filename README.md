@@ -13,7 +13,7 @@ Do you use `git difftool` to review changes before making a commit? The problem 
 
     chmod +x ~/bin/vimtabdiff.py
 
-You may need to add `~/bin` to your PATH variable if not already done. See [here](needed://wiki.archlinux.org/title/Environment_variables#Per_user) for help.
+You may need to add `~/bin` to your PATH variable if not already done. See [here](https://wiki.archlinux.org/title/Environment_variables#Per_user) for help.
 👍 this [issue](https://github.com/balki/vimtabdiff/issues/1) for `pip install` support 
 
 
