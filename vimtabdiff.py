@@ -9,6 +9,7 @@ import argparse
 import itertools
 import tempfile
 import subprocess
+import shlex
 from pathlib import Path
 from typing import Callable, TypeVar
 from collections.abc import Iterator, Sequence
@@ -23,8 +24,8 @@ def star(f: Callable[..., T]) -> Callable[[Sequence], T]:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-            description="Show diff of files from two directories in vim tabs",
-            epilog="See https://github.com/balki/vimtabdiff for more info")
+        description="Show diff of files from two directories in vim tabs",
+        epilog="See https://github.com/balki/vimtabdiff for more info")
     parser.add_argument("pathA", type=Path)
     parser.add_argument("pathB", type=Path)
     parser.add_argument("--vim", help="vim command to run", default="vim")
@@ -52,7 +53,7 @@ def get_pairs(aItems: list[Path],
     for _, items in itertools.groupby(abItems,
                                       key=star(lambda item, _: item.name)):
         match list(items):
-            case [(aItem, _), (bItem, _)]: 
+            case [(aItem, _), (bItem, _)]:
                 yield aItem, bItem
             case [(item, 'A'),]:
                 yield item, None
@@ -77,14 +78,15 @@ def main() -> None:
             aPath = a.resolve() if a else os.devnull
             bPath = b.resolve() if b else os.devnull
             print(
-                f"tabedit {aPath} | diffthis | vsp {bPath} | diffthis | diffupdate",
+                f"tabedit {aPath} | vsp {bPath} | windo diffthis | windo diffupdate",
                 file=vimCmdFile)
         cmds = f"""
+        tabdo windo :1
         tabfirst | tabclose
         call delete("{vimCmdFile.name}")
         """
         print(cmds, file=vimCmdFile)
-    subprocess.run(args.vim.split() + ["-S", vimCmdFile.name])
+    subprocess.run(shlex.split(args.vim) + ["-S", vimCmdFile.name])
 
 
 if __name__ == '__main__':

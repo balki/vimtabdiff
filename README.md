@@ -3,6 +3,7 @@ Do you use `git difftool` to review changes before making a commit? The problem 
 
 # Install
 
+```bash
     mkdir -p ~/bin
 
     # for python version >= 3.10
@@ -12,6 +13,7 @@ Do you use `git difftool` to review changes before making a commit? The problem 
     curl -o ~/bin/vimtabdiff.py "https://raw.githubusercontent.com/balki/vimtabdiff/py38/vimtabdiff.py"
 
     chmod +x ~/bin/vimtabdiff.py
+```
 
 You may need to add `~/bin` to your PATH variable if not already done. See [here](https://wiki.archlinux.org/title/Environment_variables#Per_user) for help.
 👍 this [issue](https://github.com/balki/vimtabdiff/issues/1) for `pip install` support 
@@ -69,6 +71,7 @@ You may need to add `~/bin` to your PATH variable if not already done. See [here
 
 ## Using custom vim command
 
+Using clean vim without reading `vimrc`
 ```bash
     git config --global difftool.vimtabdiff.cmd 'vimtabdiff.py --vim "vim --clean" $LOCAL $REMOTE'
 ```
@@ -82,16 +85,14 @@ Git config file (`~/.gitconfig`) should look like this
     [difftool "vimtabdiff"]
             cmd = vimtabdiff.py --vim \"vim --clean\" $LOCAL $REMOTE
 ```
+Using better diff algorithm
 
+```bash
+    git config --global difftool.vimtabdiff.cmd 'vimtabdiff.py --vim "vim +\"set diffopt+=algorithm:patience\"" $LOCAL $REMOTE'
 
-# Known issues
+```
 
-  1. If your path to vim has a space, it does not work, i.e. Following does **not** work
-
-      ```bash
-      git config difftool.vimtabdiff.cmd 'vimtabdiff.py --vim "/home/foo/my program files/bin/vim" $LOCAL $REMOTE'
-      ```
-  2. Not tested in non-linux OS. Pull requests welcome if found any issues but hopefully should work fine.
+*Note:* Not tested in non-linux OS. But I guess it should work fine. Pull requests welcome if found any issues.
 
 # Similar
 
