@@ -11,13 +11,13 @@ import tempfile
 import subprocess
 import shlex
 from pathlib import Path
-from typing import Callable, TypeVar
-from collections.abc import Iterator, Sequence
+from typing import TypeVar
+from collections.abc import Iterator, Callable
 
-T = TypeVar('T')
+R = TypeVar('R')
 
 
-def star(f: Callable[..., T]) -> Callable[[Sequence], T]:
+def star(f: Callable[..., R]) -> Callable[[tuple], R]:
     """ see https://stackoverflow.com/q/21892989 """
     return lambda args: f(*args)
 
