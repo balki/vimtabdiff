@@ -44,10 +44,10 @@ def get_dir_info(dirpath: Path | None) -> tuple[list[Path], list[Path]]:
     return dirs, files
 
 
-def get_pairs(aItems: list[Path],
-              bItems: list[Path]) -> Iterator[tuple[Path | None, Path | None]]:
-    aItems = [(item, 'A') for item in aItems]
-    bItems = [(item, 'B') for item in bItems]
+def get_pairs(aPaths: list[Path],
+              bPaths: list[Path]) -> Iterator[tuple[Path | None, Path | None]]:
+    aItems = [(item, 'A') for item in aPaths]
+    bItems = [(item, 'B') for item in bPaths]
     abItems = aItems + bItems
     abItems.sort(key=star(lambda item, tag: (item.name, tag)))
     for _, items in itertools.groupby(abItems,
@@ -61,8 +61,9 @@ def get_pairs(aItems: list[Path],
                 yield None, item
 
 
-def get_file_pairs(a: Path,
-                   b: Path) -> Iterator[tuple[Path | None, Path | None]]:
+def get_file_pairs(
+        a: Path | None,
+        b: Path | None) -> Iterator[tuple[Path | None, Path | None]]:
     aDirs, aFiles = get_dir_info(a)
     bDirs, bFiles = get_dir_info(b)
     yield from get_pairs(aFiles, bFiles)
@@ -77,11 +78,11 @@ def main() -> None:
         for a, b in get_file_pairs(args.pathA, args.pathB):
             aPath = a.resolve() if a else os.devnull
             bPath = b.resolve() if b else os.devnull
-            print(
-                f"tabedit {aPath} | vsp {bPath} | windo diffthis | windo diffupdate",
-                file=vimCmdFile)
+            print(f"tabedit {aPath} | vsp {bPath}", file=vimCmdFile)
         cmds = f"""
         tabdo windo :1
+        tabdo windo diffthis
+        tabdo windo diffupdate
         tabfirst | tabclose
         call delete("{vimCmdFile.name}")
         """
