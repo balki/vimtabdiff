@@ -44,11 +44,11 @@ You may need to add `~/bin` to your PATH variable if not already done. See [here
   * `:tabr`              → Go to first tab
   * `:drop filenam<Tab>` → Go to the tab with filename
   * `g<Tab>`             → Go to last used tab (Works in vim version > 8.2.1401)
-  * `set mouse`          → Now clicking on a tab works
+  * `:set mouse=a`       → Now clicking on a tab works
   * `]c`                 → Go to next diff hunk
   * `[c`                 → Go to previous diff hunk
   * `do`, `dp`             → Diff obtain, Diff put
-  * `zo`, `zc`, `zR`         → Fold open, Fold close, open all folds
+  * `zo`, `zc`, `zi`         → Fold open, Fold close, toggle all folds
 
 # See Git diffs
 
