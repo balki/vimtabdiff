@@ -78,6 +78,11 @@ def main() -> None:
     args = parse_args()
     vimCmdFile = tempfile.NamedTemporaryFile(mode='w', delete=False)
     with vimCmdFile:
+        cmds = f"""
+        let s:spr = &splitright
+        set splitright
+        """
+        print(cmds, file=vimCmdFile)
         for a, b in get_file_pairs(args.pathA, args.pathB):
             aPath = a.resolve() if a else os.devnull
             bPath = b.resolve() if b else os.devnull
@@ -89,6 +94,7 @@ def main() -> None:
                 continue
             print(f"tabedit {aPath} | vsp {bPath}", file=vimCmdFile)
         cmds = f"""
+        let &splitright = s:spr
         tabdo windo :1
         tabdo windo diffthis
         tabdo windo diffupdate
