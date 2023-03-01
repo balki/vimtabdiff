@@ -24,17 +24,17 @@ You may need to add `~/bin` to your PATH variable if not already done. See [here
 
 # Usage
 ```help
-    usage: vimtabdiff.py [-h] [--vim VIM] pathA pathB
+usage: vimtabdiff.py [-h] [--vim VIM] pathA pathB
 
-    Show diff of files from two directories in vim tabs
+Show diff of files from two directories in vim tabs
 
-    positional arguments:
-      pathA
-      pathB
+positional arguments:
+  pathA
+  pathB
 
-    options:
-      -h, --help  show this help message and exit
-      --vim VIM   vim command to run
+options:
+  -h, --help  show this help message and exit
+  --vim VIM   vim command to run
 ```
 
 ## Relevant vim tips
