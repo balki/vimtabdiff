@@ -87,7 +87,8 @@ def main() -> None:
                 and open(aPath, mode="rb").read() == open(bPath, mode="rb").read()
             ):
                 continue
-            print(f"tabedit {aPath} | vsp {bPath}", file=vimCmdFile)
+            # This puts aPath on the left
+            print(f"tabedit {bPath} | vsp {aPath}", file=vimCmdFile)
         cmds = f"""
         tabdo windo :1
         tabdo windo diffthis
