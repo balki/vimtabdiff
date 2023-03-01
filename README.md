@@ -100,4 +100,4 @@ Using better diff algorithm
 * https://gist.github.com/Osse/4709787 is very similar, written as a `zsh` script.
 * https://github.com/will133/vim-dirdiff is a Vim plugin that uses an interactive list of files instead of tabs.
 * https://github.com/Soares/tabdiff.vim is a Vim plugin takes a list of files as aguments.
-
+* [`:Git difftool -y`](https://github.com/tpope/vim-fugitive/blob/d507d00bd04794119beeb41da118774a96815b65/doc/fugitive.txt#L92) is a command from vim-fugitive which is a vim git plugin.
