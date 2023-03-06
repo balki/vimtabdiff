@@ -10,7 +10,7 @@ Do you use `git difftool` to review changes before making a commit? The problem 
     curl -o ~/bin/vimtabdiff.py "https://raw.githubusercontent.com/balki/vimtabdiff/master/vimtabdiff.py"
 
     # for python version < 3.10
-    curl -o ~/bin/vimtabdiff.py "https://raw.githubusercontent.com/balki/vimtabdiff/py38/vimtabdiff.py"
+    curl -o ~/bin/vimtabdiff.py "https://raw.githubusercontent.com/balki/vimtabdiff/br-py38/vimtabdiff.py"
 
     chmod +x ~/bin/vimtabdiff.py
 ```
