@@ -1,3 +1,27 @@
+Do you use `git difftool` to review changes before making a commit? The problem with that is that you get to see the diff of one file at a time. You can't easily stop it after few files and you can't go back to a previous file. `vimtabdiff.py` loads all the files with diffs, one in each vim tab page. You can move around any file and edit the diffs easily.
+
+
+# Install
+
+```bash
+    mkdir -p ~/bin
+
+    # for python version >= 3.10
+    curl -o ~/bin/vimtabdiff.py "https://raw.githubusercontent.com/balki/vimtabdiff/master/vimtabdiff.py"
+
+    # for python version < 3.10
+    curl -o ~/bin/vimtabdiff.py "https://raw.githubusercontent.com/balki/vimtabdiff/py38/vimtabdiff.py"
+
+    chmod +x ~/bin/vimtabdiff.py
+```
+
+You may need to add `~/bin` to your PATH variable if not already done. See [here](https://wiki.archlinux.org/title/Environment_variables#Per_user) for help.
+👍 this [issue](https://github.com/balki/vimtabdiff/issues/1) for `pip install` support 
+
+
+# Screenshot
+![image](https://user-images.githubusercontent.com/189196/206880555-c71b472c-144c-4c82-a4ab-f8a4fd36f7a5.png)
+
 # Usage
 ```help
     usage: vimtabdiff.py [-h] [--vim VIM] pathA pathB
@@ -34,6 +58,7 @@
 
 ## Using custom vim command
 
+Using clean vim without reading `vimrc`
 ```bash
     git config --global difftool.vimtabdiff.cmd 'vimtabdiff.py --vim "vim --clean" $LOCAL $REMOTE'
 ```
@@ -47,16 +72,14 @@ Git config file (`~/.gitconfig`) should look like this
     [difftool "vimtabdiff"]
             cmd = vimtabdiff.py --vim \"vim --clean\" $LOCAL $REMOTE
 ```
+Using better diff algorithm
 
+```bash
+    git config --global difftool.vimtabdiff.cmd 'vimtabdiff.py --vim "vim +\"set diffopt+=algorithm:patience\"" $LOCAL $REMOTE'
 
-# Known issues
+```
 
-  1. If your path to custom vim has space, it does not work. i.e. Following does *not* work
-
-      ```bash
-      git config --global difftool.vimtabdiff.cmd 'vimtabdiff.py --vim "/home/foo/my files/bin/vim" $LOCAL $REMOTE'
-      ```
-  2. Not tested in non-linux OS. Pull requests welcome if found any issues.
+*Note:* Not tested in non-linux OS. But I guess it should work fine. Pull requests welcome if found any issues.
 
 # Similar
 

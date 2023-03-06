@@ -6,7 +6,7 @@ import pathlib
 import itertools
 import tempfile
 import subprocess
-
+import shlex
 
 def star(f):
     """ see https://stackoverflow.com/q/21892989 """
@@ -15,7 +15,8 @@ def star(f):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Show diff of files from two directories in vim tabs")
+        description="Show diff of files from two directories in vim tabs",
+        epilog="See https://github.com/balki/vimtabdiff for more info")
     parser.add_argument("pathA")
     parser.add_argument("pathB")
     parser.add_argument("--vim", help="vim command to run", default="vim")
@@ -76,7 +77,7 @@ def main():
             aPath = a.resolve() if a else os.devnull
             bPath = b.resolve() if b else os.devnull
             print(
-                f"tabedit {aPath} | diffthis | vsp {bPath} | diffthis | diffupdate",
+                f"tabedit {aPath} | vsp {bPath}",
                 file=vimCmdFile)
         cmds = f"""
         let &splitright = s:spr
@@ -87,7 +88,7 @@ def main():
         call delete("{vimCmdFile.name}")
         """
         print(cmds, file=vimCmdFile)
-    subprocess.run(args.vim.split() + ["-S", vimCmdFile.name])
+    subprocess.run(shlex.split(args.vim) + ["-S", vimCmdFile.name])
 
 
 if __name__ == '__main__':
